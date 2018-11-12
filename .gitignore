@@ -1,0 +1,5 @@
+# ISO Images
+etc/user-settings/*
+*.iso
+*~
+old
