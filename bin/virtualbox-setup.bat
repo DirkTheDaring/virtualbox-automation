@@ -26,6 +26,11 @@ IF EXIST "%MY_USER_PROFILE_DIR%" GOTO SKIP_MKDIR_MY_USER_PROFILE_DIR
 MD "%MY_USER_PROFILE_DIR%"
 :SKIP_MKDIR_MY_USER_PROFILE_DIR
 
+REM Som initial setting need to be generated and included
+CALL %SCRIPT_DIR%\dn.bat /shell>%MY_USER_PROFILE%
+CALL %SCRIPT_DIR%\dc.bat /shell>>%MY_USER_PROFILE%
+CALL %MY_USER_PROFILE%
+
 IF EXIST "%ETC_DIR%\global.bat"               CALL "%ETC_DIR%\global.bat"
 IF EXIST "%ETC_DIR%\virtualbox\%VM_TEMPLATE%.bat" CALL "%ETC_DIR%\virtualbox\%VM_TEMPLATE%.bat"
 IF "%ISO_DIR%" == ""            SET ISO_DIR=%SCRIPT_DIR%\..\iso
@@ -94,7 +99,7 @@ IF NOT EXIST "%KICKSTART_TEMPLATE%" GOTO skip_to_image_creation
 
 SET KICKSTART_FILE=%VIRTUALBOX_VM_DIR%\%VM_NAME%\kickstart.ks
 
-CALL %SCRIPT_DIR%\repl.bat "/o:%KICKSTART_FILE%" /u /r "%KICKSTART_TEMPLATE%" "^#USER_PLACEHOLDER DO NOT DELETE.*" "%LINE%"  "^USER_NAME=.*$" "USER_NAME=%SAMACCOUNTNAME%" "^network[ |\t]+--hostname=.*$" "network --hostname=%HOSTNAME%" "KERBEROS_DOMAIN" "%DOMAIN%" "KERBEROS_SERVER" "%KERBEROS_SERVER%" "LDAP_BASE" "%LDAP_BASE%"
+CALL %SCRIPT_DIR%\repl.bat "/o:%KICKSTART_FILE%" /u /r "%KICKSTART_TEMPLATE%" "^#USER_PLACEHOLDER DO NOT DELETE.*" "%LINE%"  "^USER_NAME=.*$" "USER_NAME=%SAMACCOUNTNAME%" "^network[ |\t]+--hostname=.*$" "network --hostname=%HOSTNAME%" "KERBEROS_DOMAIN" "%LDAP_DOMAIN%" "KERBEROS_SERVER" "%DOMAIN_CONTROLLER%" "LDAP_SEARCHBASE" "%LDAP_SEARCHBASE%"
 
 
 :skip_to_image_creation

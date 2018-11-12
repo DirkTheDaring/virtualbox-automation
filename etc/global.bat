@@ -30,9 +30,6 @@ SET ETC_DIR=%ROOT_DIR%\etc
 SET KICKSTART_DIR=%ETC_DIR%\kickstart-templates
 
 REM LDAP Settings
-
-REM FIXME You msut set ldap search base
-SET LDAP_SEARCHBASE=FIXME
 SET LDAP_ATTRIBUTES=sAMAccountName,givenname,sn,mail,Department,telephoneNumber,uidNumber,gidNumber,msSFU30HomeDirectory
 
 
