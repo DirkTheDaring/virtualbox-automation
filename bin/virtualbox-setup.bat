@@ -144,7 +144,6 @@ EXIT /b 11
 :start_unattended_install
 
 vboxmanage unattended install %VM_NAME% "--iso=%IMAGE_FILE%" "--script-template=%KICKSTART_FILE%"
-exit /b 0
 vboxmanage startvm %VM_NAME%
 
 echo "Done."
