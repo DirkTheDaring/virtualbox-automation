@@ -1,0 +1,3 @@
+REM Profile Setting for a VM
+
+SET DEFAULT_IMAGE_URL=%COREOS_SERVER_URL%
