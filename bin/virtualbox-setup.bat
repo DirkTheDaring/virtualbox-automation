@@ -103,7 +103,7 @@ CALL %SCRIPT_DIR%\repl.bat "/o:%KICKSTART_FILE%" /u /r "%KICKSTART_TEMPLATE%" "^
 
 
 :skip_to_image_creation
-SET PATH=%PATH%;%VIRTUALBOX_HOME_DIR%
+SET PATH=%VIRTUALBOX_HOME_DIR%;%PATH%
 
 vboxmanage createvm --name %VM_NAME% --ostype %OS_TYPE% --register
 if %ERRORLEVEL% == 0 goto next_step
