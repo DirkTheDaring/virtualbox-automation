@@ -25,8 +25,14 @@ Function Main(args)
   Dim i
   Dim adodbStreamIn
   Dim adodbStreamOut
-
-  Const adReadLine = -2
+  Dim adodbStreamOutNOBOM
+  
+  Const adReadLine  = -2
+  Const adWriteLine = 1
+  Const adCRLF      = -1
+  Const adLF        = 10
+  Const adSaveCreateOverWrite = 2
+  Const adTypeBinary = 1
 
 
   If args.Unnamed.Count < 3 Then
@@ -59,6 +65,7 @@ Function Main(args)
   Set fso         = CreateObject("Scripting.FileSystemObject")
   Set adodbStreamIn  = CreateObject("ADODB.Stream")
   Set adodbStreamOut = CreateObject("ADODB.Stream")
+  Set adodbStreamOutNOBOM = CreateObject("ADODB.Stream")
 
   If Not fso.FileExists(filename) Then
     WScript.Echo "FILE DOES NOT EXIST: " & filename
@@ -66,18 +73,22 @@ Function Main(args)
   End If
 
   adodbStreamIn.CharSet = "utf-8"
+  adodbStreamIn.LineSeparator = adLF
+
   adodbStreamIn.Open
   adodbStreamIn.LoadFromFile(filename)
 
   If Not outputFilename = "" Then
      adodbStreamOut.CharSet = "utf-8"
+     adodbStreamOut.LineSeparator = adLF
      adodbStreamOut.Open
 
   End If
 
   Do Until adodbStreamIn.EOS
     line = adodbStreamIn.ReadText(adReadLine)
-
+    'WScript.Echo line
+    'WScript.Quit(0)
 	i=1
 	While i < args.Unnamed.Count
 	  oldstr = args.Unnamed(i)
@@ -85,7 +96,7 @@ Function Main(args)
 	  i = i + 2
 	
 	  If useRegex Then
-		regex.Pattern = oldstr
+            regex.Pattern = oldstr
 	    line = regex.Replace(line, newstr)
 	  Else
 	    line = Replace(line,oldstr,newstr)
@@ -96,14 +107,23 @@ Function Main(args)
     If outputFilename = "" Then
       WScript.Echo line
     Else
-       adodbStreamOut.WriteText line & chr(10)
+      adodbStreamOut.WriteText line , adWriteLine
     End If
 
   Loop
 
   If Not outputFilename = "" Then
-    adodbStreamOut.SaveToFile outputFilename,2
+    'adodbStreamOut.SaveToFile outputFilename,adSaveCreateOverWrite
+    adodbStreamOut.Position = 3 
+    With adodbStreamOutNOBOM 
+      .Type = adTypeBinary
+      .Open
+      adodbStreamOut.CopyTo adodbStreamOutNOBOM
+      .SaveToFile outputFilename,adSaveCreateOverWrite
+    End With
+
     adodbStreamOut.Close
+    adodbStreamOutNOBOM.Close
   End If
 
   adodbStreamIn.Close
