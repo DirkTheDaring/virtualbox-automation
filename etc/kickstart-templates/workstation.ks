@@ -217,7 +217,7 @@ passwd -f -u $USER_NAME
 passwd -f -u fedora
 
 cd /home/$USER_NAME/
-curl -OL https://github.com/atom/atom/releases/download/v1.32.1/atom.x86_64.rpm
+curl -L https://atom.io/download/rpm -o atom.x86_64.rpm
 rpm --install atom.x86_64.rpm
 chown $USER_NAME.users atom.x86_64.rpm
 #rm            atom.x86_64.rpm
